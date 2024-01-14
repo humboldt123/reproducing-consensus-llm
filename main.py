@@ -1,12 +1,8 @@
-from dotenv import load_dotenv
 from openai import OpenAI
 
 import random
 
 from agents import *
-
-# we store our openai api key in .env (OPENAI_API_KEY)
-load_dotenv()
 
 client = OpenAI()
 
