@@ -1,28 +1,32 @@
 from openai import OpenAI
-
 import random
 
 from agents import *
-from keys import get_key
+import prompts
 
 
 
 
-# agents = []
-# for i in range (5):
-#     agents.append(Agent(random.randint(0, 100)))
+agents = []
 
-# for agent in agents:
-#     print(str(agent))
 
-# # client = OpenAI(api_key="")
-# completion = client.chat.completions.create(
-#   model="gpt-3.5-turbo",
-#   messages = [
-#     {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-#             {"role": "user", "content": "Hello"},
-#        {"role": "assistant", "content": "Hello, how can I help you?"},
-#   ]
-# )
+# todo: add way to queue updates, print more stuff
+for i in range(3):
+    agents.append(Agent1D(i, random.randint(0, 100)))
 
-# print(completion.choices[0].message)
+for agent in agents:
+    print(str(agent))
+
+for i in range(len(agents)):
+    agent = agents[i]
+    message = prompts.one_dimensional.game_description.format(agent.pos, "[{}]".format(", ".join(map(lambda a : str(a.pos), filter(lambda a: a.marker != agent.marker, agents)))))
+    print("AGENT", agent.marker)
+    print("---------")
+    print("Position: {}\nPeers: {}".format(agent.pos, "[{}]".format(", ".join(map(lambda a : str(a.pos), filter(lambda a: a.marker != agent.marker, agents))))))
+    agent.prompt(message + " " + prompts.agent_output_form)
+    print(agent.latest)
+    agent.update(agent.latest.split("\nPosition: ")[1])
+    print("---------")
+
+for agent in agents:
+    print(str(agent))
