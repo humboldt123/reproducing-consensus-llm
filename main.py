@@ -3,18 +3,19 @@ from openai import OpenAI
 import random
 
 from agents import *
-
-client = OpenAI()
-
-agents = []
-for i in range (5):
-    agents.append(Agent(random.randint(0, 100)))
-
-for agent in agents:
-    print(str(agent))
+from keys import get_key
 
 
 
+
+# agents = []
+# for i in range (5):
+#     agents.append(Agent(random.randint(0, 100)))
+
+# for agent in agents:
+#     print(str(agent))
+
+# # client = OpenAI(api_key="")
 # completion = client.chat.completions.create(
 #   model="gpt-3.5-turbo",
 #   messages = [
