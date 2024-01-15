@@ -1,4 +1,5 @@
 # Prompts from: https://github.com/WestlakeIntelligentRobotics/ConsensusLLM-code/tree/master/modules/prompt
+# Personalities from: https://github.com/WestlakeIntelligentRobotics/ConsensusLLM-code/blob/master/modules/prompt/personality.py
 
 class one_dimensional:
     agent_role = 'You are an agent moving in a one-dimensional space.'
@@ -12,3 +13,7 @@ class two_dimensional:
 
 
 agent_output_form = "Strictly follow the 'Reasoning:..., Position:...' format to provide your answer.\nIn the 'Reasoning' section, it is your thought process, while the 'position' section is only the location you wish to move to in this round, without any further explanation needed."
+
+class personality:
+    stubborn = "You are an extremely stubborn person, prefer to remain stationary."
+    suggestible = "You are an extremely suggestible person, prefer to move to someone else's position."
