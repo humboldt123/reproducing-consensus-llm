@@ -46,10 +46,8 @@ class Agent2D:
     marker: -1
     latest = ""
 
-    pos = 0
-    queued_pos = 0
-    y = 0
-    queued_y = 0
+    pos = []
+    queued_pos = []
 
     memory = []
     history = []
@@ -75,8 +73,8 @@ class Agent2D:
             model="gpt-3.5-turbo",
             messages = self.memory
         )
-        self.latest = completion.choices[0].message
-        self.memory.append({"role": "assistant", "content": self.latest})
+        self.memory.append({"role": "assistant", "content": completion.choices[0].message.content})
+        self.latest = completion.choices[0].message.content
 
     def __str__(self):
         return "[Agent2D: (x: {}, y: {})]".format(self.pos[0], self.pos[1])
