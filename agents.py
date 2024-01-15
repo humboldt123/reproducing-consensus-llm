@@ -5,12 +5,13 @@ from keys import get_key
 
 class Agent:
     identifier = ""
+    personality = "default"
     latest = "" # latest msg
     pos, queued_pos = None, None
     memory = []
     position_history = []
 
-    def __init__(self, id, pos):
+    def __init__(self, id, pos, personality="default"):
         self.identifier = id
         self.pos = pos
         self.position_history = [pos]
@@ -20,6 +21,13 @@ class Agent:
 
     def define_system(self):
         pass
+
+    def get_personality_strategy(self):
+        if (self.personality == "stubborn"):
+            return " " + prompts.personality.stubborn
+        if (self.personality == "suggestible"):
+            return " " + prompts.personality.stubborn
+        return ""
 
     def prompt(self):
         pass
@@ -36,7 +44,7 @@ class Agent:
 
 class Agent1D(Agent):
     def define_system(self):
-        self.memory.append({"role": "system", "content": prompts.one_dimensional.agent_role})
+        self.memory.append({"role": "system", "content": prompts.one_dimensional.agent_role + self.get_personality_strategy()})
 
     
     def prompt(self, message):
@@ -49,11 +57,11 @@ class Agent1D(Agent):
         self.latest = completion.choices[0].message.content
 
     def __str__(self):
-        return "[Agent1D ({}): {}]".format(self.identifier, self.pos)
+        return "[Agent1D ({}-{}): {}]".format(self.personality, self.identifier, self.pos)
 
 class Agent2D(Agent):
     def define_system(self):
-        self.memory.append({"role": "system", "content": prompts.two_dimensional.agent_role})    
+        self.memory.append({"role": "system", "content": prompts.two_dimensional.agent_role + self.get_personality_strategy()})    
 
     def prompt(self, message):
         self.memory.append({"role": "user", "content": message})
@@ -65,4 +73,4 @@ class Agent2D(Agent):
         self.latest = completion.choices[0].message.content
 
     def __str__(self):
-        return "[Agent2D ({}): (x: {}, y: {})]".format(self.identifier, self.pos[0], self.pos[1])
+        return "[Agent2D ({}-{}): (x: {}, y: {})]".format(self.personality, self.identifier, self.pos[0], self.pos[1])

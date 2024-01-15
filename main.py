@@ -11,6 +11,7 @@ rounds = 10
 
 # we create our list of agents and add them to the list
 for identifier in range(2):
+    # 1d --> 2d
     agents.append(Agent2D(identifier, [random.randint(0, 100), random.randint(0, 100)]))
 
 # todo: async
