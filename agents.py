@@ -6,27 +6,37 @@ from keys import get_key
 
 class Agent1D:
     marker: -1
-    pos = 0
-    history = []
     latest = ""
+    
+    pos = 0
+    queued_pos = 0
+
+    memory = []
+    history = []
 
     def __init__(self, marker, pos):
         self.marker = marker
         self.pos = pos
-        
-        self.history.append({"role": "system", "content": prompts.one_dimensional.agent_role})
+        self.history = [pos]
+
+        self.memory.append({"role": "system", "content": prompts.one_dimensional.agent_role})
         self.client = OpenAI(api_key=get_key())
+
     
-    def update(self, pos):
-        self.pos = pos
+    def queue(self, pos):
+        self.queued_pos = pos
+    
+    def update(self):
+        self.pos = self.queued_pos
+        self.history.append(self.pos)
     
     def prompt(self, message):
-        self.history.append({"role": "user", "content": message})
+        self.memory.append({"role": "user", "content": message})
         completion = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages = self.history
+            messages = self.memory
         )
-        self.history.append({"role": "assistant", "content": completion.choices[0].message.content})
+        self.memory.append({"role": "assistant", "content": completion.choices[0].message.content})
         self.latest = completion.choices[0].message.content
 
     def __str__(self):
@@ -34,30 +44,39 @@ class Agent1D:
 
 class Agent2D:
     marker: -1
-    x = 0
+    latest = ""
+
+    pos = 0
+    queued_pos = 0
     y = 0
+    queued_y = 0
+
+    memory = []
     history = []
 
-    def __init__(self, marker, x, y):
+    def __init__(self, marker, pos):
         self.marker = marker
-        self.x = x
-        self.y = y
-        
-        self.history.append({"role": "system", "content": prompts.two_dimensional.agent_role})        
+        self.pos = pos
+        self.history = [pos]
+
+        self.memory.append({"role": "system", "content": prompts.two_dimensional.agent_role})        
         self.client = OpenAI(api_key=get_key())
 
-    def update(self, x, y):
-        self.x = x
-        self.y = y
+    def queue(self, pos):
+        self.queued_pos = pos
+    
+    def update(self):
+        self.pos = self.queued_pos
+        self.history.append(self.pos)
 
-    def prompt(self, id, message):
-        self.history.append({"role": "user", "content": message})
+    def prompt(self, message):
+        self.memory.append({"role": "user", "content": message})
         completion = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages = self.history
+            messages = self.memory
         )
         self.latest = completion.choices[0].message
-        self.history.append({"role": "assistant", "content": self.latest})
+        self.memory.append({"role": "assistant", "content": self.latest})
 
     def __str__(self):
-        return "[Agent2D: (x: {}, y: {})]".format(self.x, self.y)
+        return "[Agent2D: (x: {}, y: {})]".format(self.pos[0], self.pos[1])
