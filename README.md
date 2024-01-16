@@ -1,4 +1,4 @@
-# Reproducing Results: Multi-Agent Coonsensus Seeking via Large Language Models
+# Reproducing Results: Multi-Agent Consensus Seeking via Large Language Models
 Reproducing the results of Westlake Intelligent Robotics' [Consensus LLM Paper](https://github.com/WestlakeIntelligentRobotics/ConsensusLLM-code)
 
 ## Prerequisites
